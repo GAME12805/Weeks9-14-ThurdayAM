@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,8 @@ using UnityEngine.UI;
 
 public class DestructionManager : MonoBehaviour
 {
+    public CinemachineVirtualCamera cam;
+    public Transform player;
     public GameObject buildingPrefab;
     public Button button;
 
@@ -17,6 +20,8 @@ public class DestructionManager : MonoBehaviour
         button.interactable = false;
         Building whichBuilding = buildings[Random.Range(0, buildings.Count)];
         whichBuilding.DestoryMe(this);
+
+        cam.Follow = whichBuilding.transform;
     }
 
     public void SpawnBuildings()
@@ -24,7 +29,7 @@ public class DestructionManager : MonoBehaviour
         for(int i = 0; i < 5; i++)
         {
             GameObject go = Instantiate(buildingPrefab);
-            go.transform.position = Random.insideUnitSphere * 8;
+            go.transform.position = (Vector2)Random.insideUnitSphere * 15;
             buildings.Add(go.GetComponent<Building>());
         }
     }
@@ -33,5 +38,6 @@ public class DestructionManager : MonoBehaviour
     {
         buildings.Remove(building);
         button.interactable = true;
+        cam.Follow = player;
     }
 }
